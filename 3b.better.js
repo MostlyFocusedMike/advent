@@ -327,12 +327,10 @@ const input = [
 const getAnswer = (rows, spaces = 3, jump = 1) => {
   let trees = 0;
   let position = spaces;
-  const rowLength = rows[0].length;
-
+  const rowLength = rows[0].length
   for (let i = jump; i < rows.length; i += jump) {
-    const row = rows[i];
-    if (row[position] === '#') trees++
-    position = (position + spaces) % rowLength
+    if (rows[i][position] === '#') trees++;
+    position = (position + spaces) % rowLength;
   }
   return trees;
 }
