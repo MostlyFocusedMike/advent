@@ -961,18 +961,15 @@ const convertToID = (rawInput) => {
   return row * 8 + column
 }
 
-const arr = [9,10,11,12, 13, 14, 15, 16];
-const findMissing = (arr) => {
-  const min = arr[0];
-  const max = arr[arr.length - 1];
-
-  // (min + max) * (len / 2)
-  const checkSum = ( min + max ) * ((max - (min - 1)) / 2);
-  const total = arr.reduce((a, v) => a += v)
-  console.log('Missing: ', checkSum - total);
+const findMissing = (arr, offset) => {
+  const len = arr.length;
+  let check = (len + 2) * ((len + 1) / 2);
+  let total = 0
+  for (let i = 0; i < len; i++) {
+    total += arr[i] - offset;
+  }
+  console.log('missing: ',  check - total  + offset);
 }
-
-// findMissing(arr)
 
 const findHighest = (inputs) => {
   let highest = 0;
@@ -982,9 +979,8 @@ const findHighest = (inputs) => {
     IDs.push(ID)
     if (ID > highest) highest = ID;
   }
-  const sortedIDs = IDs.sort((a,b) => a - b)
-  findMissing(sortedIDs)
-  console.log('sortedIDs[0]: ', sortedIDs[0], sortedIDs[sortedIDs.length - 1], sortedIDs.length);
-  return highest;
+  const offset = (highest - 1) % IDs.length
+  findMissing(IDs, offset)
+  console.log('high: ', highest);
 }
-console.log(findHighest(inputs));
+findHighest(inputs);
