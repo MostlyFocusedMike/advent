@@ -997,8 +997,22 @@ hcl:a3046e pid:626863952 ecl:lzr iyr:2029 eyr:2024 byr:2000 hgt:193cm
 
 cid:244
 hcl:#866857 ecl:amb byr:1931
-eyr:1928 pid:557376401 hgt:182cm iyr:2013
-`
+eyr:1928 pid:557376401 hgt:182cm iyr:2013`;
+
+const input2 = `eyr:1972 cid:100
+hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
+
+iyr:2019
+hcl:#602927 eyr:1967 hgt:170cm
+ecl:grn pid:012533040 byr:1946
+
+hcl:dab227 iyr:2012
+ecl:brn hgt:182cm pid:021572410 eyr:2020 byr:1992 cid:277
+
+hgt:59cm ecl:zzz
+eyr:2038 hcl:74454a iyr:2023
+pid:3556412378 byr:2007`
+
 const formattedInput = input.split('\n\n').map(str => {
   const betterString = str.replace(/\s/g, ',')
   const obj = {}
@@ -1010,21 +1024,45 @@ const formattedInput = input.split('\n\n').map(str => {
 })
 
 const main = (inputs) => {
-  const checks = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+  const minMax = (data, min, max) => {
+    const num = parseInt(data);
+    return num >= min && num <= max;
+  }
+  const checks = [
+    { text: 'byr',
+      validator: (data) => minMax(data, 1920, 2002) },
+    { text: 'iyr',
+      validator: (data) => minMax(data, 2010, 2020) },
+    { text: 'eyr',
+      validator: (data) => minMax(data, 2020, 2030) },
+    { text: 'hgt',
+      validator(data) {
+        const matches = data.match(/(\d+)(cm|in)/)
+        if (!matches || !matches[1] || !matches[2]) return false;
+        return matches[2] === 'cm' && minMax(matches[1], 150, 193)
+          || matches[2] === 'in' && minMax(matches[1], 59, 76)
+      } },
+    { text: 'hcl',
+      validator: (data) => /#[0-9A-Fa-f]{6}/.test(data) },
+    { text: 'ecl',
+      validator: (data) => /^(amb|blu|brn|gry|grn|hzl|oth)$/.test(data) },
+    { text: 'pid',
+      validator: (data) => /^[0-9]{9}$/.test(data) },
+  ];
   let validPassports = 0;
   for (let input of inputs) {
     let valid = 1;
     for (let check of checks) {
-      if (!input[check]) {
+      if (!input[check.text]
+        || (input[check.text] && !check.validator(input[check.text]))
+      ) {
         valid = 0;
         break;
       }
     }
-    if (!valid && Object.keys(input).length > 7) console.log('input: ', input);
     validPassports += valid;
   }
   console.log('validPassports: ', validPassports);
 }
 
 main(formattedInput.slice(0,300));
-//  console.log('input: ', JSON.stringify(formattedInput, null, 2));

@@ -1,0 +1,18 @@
+GET https://adventofcode.com/2020/day/5/input
+authority: adventofcode.com
+scheme: https
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+accept-encoding: gzip, deflate, br
+accept-language: en-US,en;q=0.9
+cache-control: no-cache
+cookie: _ga=GA1.2.1998975160.1606875173; _gid=GA1.2.1558699805.1606875173; ru=53616c7465645f5fa22d7e084728911fec9eefe024d49721662a15956d86f928; session=53616c7465645f5ff1f46ee65944faa68de27bf439fb8fcb17faff3aca3615b03281240f77713e32c0545c41f8a8631a
+pragma: no-cache
+referer: https://adventofcode.com/2020/day/4
+sec-ch-ua: "Chromium";v="86", "\"Not\\A;Brand";v="99", "Google Chrome";v="86"
+sec-ch-ua-mobile: ?0
+sec-fetch-dest: document
+sec-fetch-mode: navigate
+sec-fetch-site: same-origin
+sec-fetch-user: ?1
+upgrade-insecure-requests: 1
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36
