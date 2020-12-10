@@ -1,4 +1,14 @@
-`striped white bags contain 4 drab silver bags.
+const babyInputs = `light red bags contain 1 bright white bag, 2 muted yellow bags.
+dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+bright white bags contain 1 shiny gold bag.
+muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+faded blue bags contain no other bags.
+dotted black bags contain no other bags.`
+
+const inputs = `striped white bags contain 4 drab silver bags.
 drab silver bags contain no other bags.
 pale plum bags contain 1 dark black bag.
 muted gold bags contain 1 wavy red bag, 3 mirrored violet bags, 5 bright gold bags, 5 plaid white bags.
@@ -592,3 +602,89 @@ striped silver bags contain 5 clear orange bags, 2 dotted fuchsia bags.
 clear cyan bags contain 5 muted gray bags, 3 wavy aqua bags.
 light black bags contain 1 striped yellow bag.
 muted white bags contain 3 muted tomato bags, 5 light black bags, 4 pale black bags, 5 shiny gold bags.`
+
+
+const format = (inputs) => {
+  const bags = {}
+  const strings = inputs.split('\n');
+  for (const str of strings) {
+    const mainBag = str.match(/(\w*\s\w*) bags contain/)[1];
+    const innerBags = str.match(/(\d\s\w+\s\w+)/g);
+    bags[mainBag] = {
+      contains: []
+    };
+    if (innerBags) {
+      bags[mainBag].contains = innerBags.map(bag => ({ type: bag.slice(2), amount: bag[0] }))
+    }
+  }
+  return bags;
+}
+
+const main = (bagsObj) => {
+  const bagKeys = Object.keys(bagsObj);
+  let goldBags = {};
+
+  const recurse = (bagKey, tempBags, check) => {
+    if (bagKey === 'shiny gold') {
+      check.gold = true;
+      return;
+    }
+    if (bagsObj[bagKey].contains.length) {
+      tempBags[bagKey] = true;
+      for (const innerBag of bagsObj[bagKey].contains) {
+        check.gold = false
+        recurse(innerBag.type, tempBags, check)
+        if (check.gold) {
+            goldBags = {
+            ...goldBags,
+            ...tempBags,
+          }
+        }
+      }
+    }
+  }
+  for (bagKey of bagKeys) {
+    // recurse
+    const tempBags = {};
+    if (bagKey !== 'shiny gold') {
+      const check = { gold: false }
+      recurse(bagKey, tempBags, check)
+      if (check.gold) {
+        goldBags = {
+          ...goldBags,
+          ...tempBags,
+        }
+        check.gold = false
+      }
+    } else {
+      console.log('SKIP: ', );
+    }
+  }
+  console.log('goldBags: ', Object.keys(goldBags).length);
+}
+// 396 too high
+main(format(inputs))
+
+// const bags = {
+//   'light red': {
+//     contains: [
+//       {
+//         type: 'bright white',
+//         amount: 1
+//       }
+//     ]
+//   },
+//   'dark orange': {
+//     contains: [
+//       {
+//         type: 'bright white',
+//         amount: 3
+//       },
+//       {
+//         type: 'muted yellow',
+//         amount: 4
+//       }
+//     ]
+//   },
+//   // ...
+// }
